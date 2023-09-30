@@ -4,19 +4,17 @@ using UnityEngine;
 
 public class WaypointBehaviour : MonoBehaviour
 {
-    public GameObject nextWaypoint;
+    public Transform nextWaypoint;
     public bool reached = false;
 
     public Vector3 toNextWayPoint =  Vector3.zero;
 
-    void Start() {
+    public void findNextPoint() {
         if (nextWaypoint != null) {
-            Vector3 diff = this.transform.position - nextWaypoint.transform.position;
+            Vector3 diff = this.transform.position - nextWaypoint.position;
             Vector3 diffNorm = diff.normalized;
 
             toNextWayPoint = diffNorm;
         }
-
-        
     }
 }
