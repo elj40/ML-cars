@@ -130,6 +130,10 @@ public class PrometeoCarController : MonoBehaviour
       public bool isDrifting; // Used to know whether the car is drifting or not.
       [HideInInspector]
       public bool isTractionLocked; // Used to know whether the traction of the car is locked or not.
+      [HideInInspector]
+      public float steeringAxis; // Used to know whether the steering wheel has reached the maximum value. It goes from -1 to 1.
+      [HideInInspector]
+      public bool deceleratingCar;
 
     //PRIVATE VARIABLES
 
@@ -137,12 +141,10 @@ public class PrometeoCarController : MonoBehaviour
       IMPORTANT: The following variables should not be modified manually since their values are automatically given via script.
       */
       Rigidbody carRigidbody; // Stores the car's rigidbody.
-      float steeringAxis; // Used to know whether the steering wheel has reached the maximum value. It goes from -1 to 1.
       float throttleAxis; // Used to know whether the throttle has reached the maximum value. It goes from -1 to 1.
       float driftingAxis;
       float localVelocityZ;
       float localVelocityX;
-      bool deceleratingCar;
       bool touchControlsSetup = false;
       /*
       The following variables are used to store information about sideways friction of the wheels (such as
@@ -327,41 +329,41 @@ public class PrometeoCarController : MonoBehaviour
 
       }else{
 
-        if(Input.GetKey(KeyCode.W)){
-          CancelInvoke("DecelerateCar");
-          deceleratingCar = false;
-          GoForward();
-        }
-        if(Input.GetKey(KeyCode.S)){
-          CancelInvoke("DecelerateCar");
-          deceleratingCar = false;
-          GoReverse();
-        }
+        // if(Input.GetKey(KeyCode.W)){
+        //   CancelInvoke("DecelerateCar");
+        //   deceleratingCar = false;
+        //   GoForward();
+        // }
+        // if(Input.GetKey(KeyCode.S)){
+        //   CancelInvoke("DecelerateCar");
+        //   deceleratingCar = false;
+        //   GoReverse();
+        // }
 
-        if(Input.GetKey(KeyCode.A)){
-          TurnLeft();
-        }
-        if(Input.GetKey(KeyCode.D)){
-          TurnRight();
-        }
-        if(Input.GetKey(KeyCode.Space)){
-          CancelInvoke("DecelerateCar");
-          deceleratingCar = false;
-          Handbrake();
-        }
-        if(Input.GetKeyUp(KeyCode.Space)){
-          RecoverTraction();
-        }
-        if((!Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.W))){
-          ThrottleOff();
-        }
-        if((!Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.W)) && !Input.GetKey(KeyCode.Space) && !deceleratingCar){
-          InvokeRepeating("DecelerateCar", 0f, 0.1f);
-          deceleratingCar = true;
-        }
-        if(!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && steeringAxis != 0f){
-          ResetSteeringAngle();
-        }
+        // if(Input.GetKey(KeyCode.A)){
+        //   TurnLeft();
+        // }
+        // if(Input.GetKey(KeyCode.D)){
+        //   TurnRight();
+        // }
+        // if(Input.GetKey(KeyCode.Space)){
+        //   CancelInvoke("DecelerateCar");
+        //   deceleratingCar = false;
+        //   Handbrake();
+        // }
+        // if(Input.GetKeyUp(KeyCode.Space)){
+        //   RecoverTraction();
+        // }
+        // if((!Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.W))){
+        //   ThrottleOff();
+        // }
+        // if((!Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.W)) && !Input.GetKey(KeyCode.Space) && !deceleratingCar){
+        //   InvokeRepeating("DecelerateCar", 0f, 0.1f);
+        //   deceleratingCar = true;
+        // }
+        // if(!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && steeringAxis != 0f){
+        //   ResetSteeringAngle();
+        // }
 
       }
 
