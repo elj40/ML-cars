@@ -1,0 +1,29 @@
+{
+    "CarAgent": {
+        "checkpoints": [
+            {
+                "steps": 99293,
+                "file_path": "results\\t3\\CarAgent\\CarAgent-99293.onnx",
+                "reward": 64.03699790686369,
+                "creation_time": 1696095279.1780457,
+                "auxillary_file_paths": [
+                    "results\\t3\\CarAgent\\CarAgent-99293.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 99293,
+            "file_path": "results\\t3\\CarAgent.onnx",
+            "reward": 64.03699790686369,
+            "creation_time": 1696095279.1780457,
+            "auxillary_file_paths": [
+                "results\\t3\\CarAgent\\CarAgent-99293.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.30.0",
+        "torch_version": "2.0.1+cpu"
+    }
+}
