@@ -9,22 +9,16 @@ public class CarAgent : Agent
     // Define variables for your agent's behavior and state here.
     public GameObject Car;
     public Transform targetWaypoint;
+    public Material failMaterial;
+    public Material winMaterial; 
 
     public float speedRewardMultiplier = 1;
 
     private int previousSpacePressed;
 
-    bool endEpisode = false;
-
     public override void Initialize()
     {
         // Initialize your agent here, called when the Agent is first created.
-    }
-
-    void Update() {
-      if (endEpisode) {
-        EndEpisode();
-      }
     }
 
     public override void OnEpisodeBegin()
@@ -36,19 +30,12 @@ public class CarAgent : Agent
 
         Car.transform.position = new Vector3(ranX, 0, ranZ);
         Car.transform.rotation = Quaternion.Euler(0, ranAngle, 0);
-
-        endEpisode = false;
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
         // Define what observations the agent should collect here.
         Vector3 toTarget = targetWaypoint.position - transform.position;
-
-        if (Mathf.Abs(toTarget.x) > 40f || Mathf.Abs(toTarget.z) > 40f) {
-          SetReward(-1f);
-          endEpisode = true;
-        }
         Vector3 toTargetNorm = toTarget.normalized;
         sensor.AddObservation(toTargetNorm);
 
@@ -57,6 +44,7 @@ public class CarAgent : Agent
 
         PrometeoCarController controller = Car.GetComponent<PrometeoCarController>();
         sensor.AddObservation(controller.carSpeed);
+        sensor.AddObservation(Car.transform.eulerAngles.y/360f);  
     }
 
     public override void OnActionReceived(ActionBuffers vectorAction)
@@ -154,6 +142,11 @@ public class CarAgent : Agent
           EndEpisode();
         }
       }
+      else if (other.tag == "Wall") {
+        SetReward(-1f);
+        EndEpisode();
+      }
     }
+
 }
 
