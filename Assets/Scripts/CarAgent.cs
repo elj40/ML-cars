@@ -46,19 +46,17 @@ public class CarAgent : Agent
 
 
         float targetDot = Vector3.Dot(Vector3.forward, toTargetNorm);
-        sensor.AddObservation(toTargetNorm);
-        float toTargetMag = toTarget.magnitude/maxWaypointDistance;
+        float toTargetMag = toTarget.magnitude/maxWaypointDistance; 
 
         sensor.AddObservation(targetDot);
         sensor.AddObservation(toTargetMag);
 
-
         WaypointBehaviour wpB = targetWaypoint.gameObject.GetComponent<WaypointBehaviour>();
-        sensor.AddObservation(wpB.toNextWayPoint.normalized);
+        float toNextWPDot = Vector3.Dot(Vector3.forward, wpB.toNextWayPoint.normalized);
+        sensor.AddObservation(toNextWPDot);
 
         PrometeoCarController controller = Car.GetComponent<PrometeoCarController>();
         sensor.AddObservation(controller.carSpeed);
-        sensor.AddObservation(Car.transform.eulerAngles.y/360f);  
     }
 
     public override void OnActionReceived(ActionBuffers vectorAction)
