@@ -155,7 +155,9 @@ MonoBehaviour:
   MaxStep: 0
   Car: {fileID: 4588466963864825058}
   targetWaypoint: {fileID: 0}
-  speedRewardMultiplier: 1
+  failMaterial: {fileID: 2100000, guid: f81f9b1d2bc28734cb4714cd65627f26, type: 2}
+  winMaterial: {fileID: 2100000, guid: 14270b4fdb4e10343bb7f0cf1c2ae318, type: 2}
+  speedRewardMultiplier: 0
 --- !u!114 &7786654485524287019
 MonoBehaviour:
   m_ObjectHideFlags: 0

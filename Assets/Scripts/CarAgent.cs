@@ -9,10 +9,17 @@ public class CarAgent : Agent
     // Define variables for your agent's behavior and state here.
     public GameObject Car;
     public Transform targetWaypoint;
+    public MeshRenderer groundMesh;
     public Material failMaterial;
     public Material winMaterial; 
 
+
     public float speedRewardMultiplier = 1;
+    public float reversePenalty = 0.1f;
+    public float maxWaypointDistance = 100f;
+    
+    public Vector3[] spawnPoints;
+
 
     private int previousSpacePressed;
 
@@ -24,20 +31,27 @@ public class CarAgent : Agent
     public override void OnEpisodeBegin()
     {
         // Reset the state of the agent for a new episode here.
-        float ranX = Random.Range(-30f, 30f);
-        float ranZ = Random.Range(-30f, 30f);
         float ranAngle = Random.Range(0f, 360f);
+        int ranI = Random.Range(0, spawnPoints.Length);
 
-        Car.transform.position = new Vector3(ranX, 0, ranZ);
+        Car.transform.localPosition = spawnPoints[ranI];
         Car.transform.rotation = Quaternion.Euler(0, ranAngle, 0);
     }
 
     public override void CollectObservations(VectorSensor sensor)
     {
         // Define what observations the agent should collect here.
-        Vector3 toTarget = targetWaypoint.position - transform.position;
+        Vector3 toTarget = targetWaypoint.localPosition - transform.localPosition;
         Vector3 toTargetNorm = toTarget.normalized;
+
+
+        float targetDot = Vector3.Dot(Vector3.forward, toTargetNorm);
         sensor.AddObservation(toTargetNorm);
+        float toTargetMag = toTarget.magnitude/maxWaypointDistance;
+
+        sensor.AddObservation(targetDot);
+        sensor.AddObservation(toTargetMag);
+
 
         WaypointBehaviour wpB = targetWaypoint.gameObject.GetComponent<WaypointBehaviour>();
         sensor.AddObservation(wpB.toNextWayPoint.normalized);
@@ -64,7 +78,7 @@ public class CarAgent : Agent
           controller.CancelInvoke("DecelerateCar");
           controller.deceleratingCar = false;
           controller.GoReverse();
-
+          AddReward(-1f * reversePenalty);
         }
         //A: Left
         if(discreteActions[2] == 1){
@@ -104,7 +118,7 @@ public class CarAgent : Agent
 
         //Add speed reward
         float speedReward = (controller.carSpeed/controller.maxSpeed) * speedRewardMultiplier;
-        //AddReward(speedReward);
+        AddReward(speedReward);
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -132,6 +146,7 @@ public class CarAgent : Agent
     void OnTriggerEnter(Collider other) {
       if (other.tag == "Waypoint" && other.transform == targetWaypoint) {
         AddReward(10f);
+        groundMesh.sharedMaterial = winMaterial;
         Debug.Log("Hit waypoint");
         
         WaypointBehaviour wpB = other.GetComponent<WaypointBehaviour>();
@@ -144,6 +159,7 @@ public class CarAgent : Agent
       }
       else if (other.tag == "Wall") {
         SetReward(-1f);
+        groundMesh.sharedMaterial = failMaterial;
         EndEpisode();
       }
     }
