@@ -578,11 +578,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4588466963864825063, guid: f999467df58187642a5a6f9a195dbc75, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 4588466963864825063, guid: f999467df58187642a5a6f9a195dbc75, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 20.6
+      value: 16.8
       objectReference: {fileID: 0}
     - target: {fileID: 4588466963864825063, guid: f999467df58187642a5a6f9a195dbc75, type: 3}
       propertyPath: m_LocalRotation.w
@@ -629,8 +629,12 @@ PrefabInstance:
       value: -0.7
       objectReference: {fileID: 0}
     - target: {fileID: 7786654485524287013, guid: f999467df58187642a5a6f9a195dbc75, type: 3}
+      propertyPath: spawnPoints.Array.data[0].y
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7786654485524287013, guid: f999467df58187642a5a6f9a195dbc75, type: 3}
       propertyPath: spawnPoints.Array.data[0].z
-      value: -21.4
+      value: 16.8
       objectReference: {fileID: 0}
     - target: {fileID: 7786654485524287019, guid: f999467df58187642a5a6f9a195dbc75, type: 3}
       propertyPath: m_BrainParameters.VectorActionSize.Array.data[0]
@@ -679,6 +683,27 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4588466963864825063, guid: f999467df58187642a5a6f9a195dbc75, type: 3}
   m_PrefabInstance: {fileID: 5598788353618325905}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &8223403855082462579 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4588466963864825058, guid: f999467df58187642a5a6f9a195dbc75, type: 3}
+  m_PrefabInstance: {fileID: 5598788353618325905}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8672744844116699372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8223403855082462579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2902496c0120472b90269f94a0aec7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Record: 0
+  NumStepsToRecord: 0
+  DemonstrationName: FindWaypoint
+  DemonstrationDirectory: Demos
 --- !u!1001 &6300191358198688640
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -704,7 +729,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8562435868955833067, guid: e764fbb618c98e74e9359e7ee34c2b2f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -18.1
       objectReference: {fileID: 0}
     - target: {fileID: 8562435868955833067, guid: e764fbb618c98e74e9359e7ee34c2b2f, type: 3}
       propertyPath: m_LocalRotation.w

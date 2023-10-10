@@ -20,7 +20,9 @@ public class CarAgent : Agent
     
     public Vector3[] spawnPoints;
 
-
+    [HideInInspector]
+    public float[] inputs = new float[6];
+    public float[] outputs = new float[5];
     private int previousSpacePressed;
 
     public override void Initialize()
@@ -31,11 +33,14 @@ public class CarAgent : Agent
     public override void OnEpisodeBegin()
     {
         // Reset the state of the agent for a new episode here.
-        float ranAngle = Random.Range(0f, 360f);
+        //float ranAngle = Random.Range(90f, 270f);
         int ranI = Random.Range(0, spawnPoints.Length);
 
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
+        GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+
         Car.transform.localPosition = spawnPoints[ranI];
-        Car.transform.rotation = Quaternion.Euler(0, ranAngle, 0);
+        Car.transform.rotation = Quaternion.Euler(0, 180f, 0);
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -121,6 +126,8 @@ public class CarAgent : Agent
         //Add speed reward
         float speedReward = (controller.carSpeed/controller.maxSpeed) * speedRewardMultiplier;
         AddReward(speedReward);
+
+        AddReward(-0.001f);
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -160,7 +167,7 @@ public class CarAgent : Agent
         }
       }
       else if (other.tag == "Wall") {
-        SetReward(-1f);
+        SetReward(-10f);
         groundMesh.sharedMaterial = failMaterial;
         EndEpisode();
       }
