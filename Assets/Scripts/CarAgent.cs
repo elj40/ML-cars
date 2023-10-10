@@ -31,11 +31,14 @@ public class CarAgent : Agent
     public override void OnEpisodeBegin()
     {
         // Reset the state of the agent for a new episode here.
-        float ranAngle = Random.Range(0f, 360f);
+        //float ranAngle = Random.Range(90f, 270f);
         int ranI = Random.Range(0, spawnPoints.Length);
 
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
+        GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+
         Car.transform.localPosition = spawnPoints[ranI];
-        Car.transform.rotation = Quaternion.Euler(0, ranAngle, 0);
+        Car.transform.rotation = Quaternion.Euler(0, 180f, 0);
     }
 
     public override void CollectObservations(VectorSensor sensor)
