@@ -20,7 +20,9 @@ public class CarAgent : Agent
     
     public Vector3[] spawnPoints;
 
-
+    [HideInInspector]
+    public float[] inputs = new float[6];
+    public float[] outputs = new float[5];
     private int previousSpacePressed;
 
     public override void Initialize()
@@ -49,14 +51,18 @@ public class CarAgent : Agent
 
 
         float targetDot = Vector3.Dot(Vector3.forward, toTargetNorm);
+        float targetDotPerpendicular = Vector3.Dot(Vector3.right, toTargetNorm);
         float toTargetMag = toTarget.magnitude/maxWaypointDistance; 
 
         sensor.AddObservation(targetDot);
+        sensor.AddObservation(targetDotPerpendicular);
         sensor.AddObservation(toTargetMag);
 
         WaypointBehaviour wpB = targetWaypoint.gameObject.GetComponent<WaypointBehaviour>();
         float toNextWPDot = Vector3.Dot(Vector3.forward, wpB.toNextWayPoint.normalized);
+        float toNextWPDot90 = Vector3.Dot(Vector3.right, wpB.toNextWayPoint.normalized);
         sensor.AddObservation(toNextWPDot);
+        sensor.AddObservation(toNextWPDot90);
 
         PrometeoCarController controller = Car.GetComponent<PrometeoCarController>();
         sensor.AddObservation(controller.carSpeed);
@@ -120,6 +126,8 @@ public class CarAgent : Agent
         //Add speed reward
         float speedReward = (controller.carSpeed/controller.maxSpeed) * speedRewardMultiplier;
         AddReward(speedReward);
+
+        AddReward(-0.001f);
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -159,7 +167,7 @@ public class CarAgent : Agent
         }
       }
       else if (other.tag == "Wall") {
-        SetReward(-1f);
+        SetReward(-10f);
         groundMesh.sharedMaterial = failMaterial;
         EndEpisode();
       }

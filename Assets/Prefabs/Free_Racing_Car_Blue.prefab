@@ -158,10 +158,23 @@ MonoBehaviour:
   groundMesh: {fileID: 0}
   failMaterial: {fileID: 2100000, guid: f81f9b1d2bc28734cb4714cd65627f26, type: 2}
   winMaterial: {fileID: 2100000, guid: 14270b4fdb4e10343bb7f0cf1c2ae318, type: 2}
-  speedRewardMultiplier: 0
-  reversePenalty: 0.1
+  speedRewardMultiplier: 0.5
+  reversePenalty: 0.05
   maxWaypointDistance: 100
   spawnPoints: []
+  inputs:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  outputs:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
 --- !u!114 &7786654485524287019
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,7 +188,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BrainParameters:
-    VectorObservationSize: 4
+    VectorObservationSize: 6
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 0
@@ -186,7 +199,7 @@ MonoBehaviour:
     hasUpgradedBrainParametersWithActionSpec: 1
   m_Model: {fileID: 0}
   m_InferenceDevice: 0
-  m_BehaviorType: 0
+  m_BehaviorType: 1
   m_BehaviorName: CarAgent
   TeamId: 0
   m_UseChildSensors: 1
@@ -703,7 +716,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: d01ec8474f59008408b5a5f97e467116, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -986,7 +999,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 55a5fe0d71211ff40a34c5123261573c, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0
   m_Pitch: 1
   Loop: 0
   Mute: 0
