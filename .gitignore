@@ -10,7 +10,6 @@
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
 
-
 #My own exclusions
 /Assets/ADG_Textures*
 /venv/

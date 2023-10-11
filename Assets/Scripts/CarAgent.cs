@@ -16,6 +16,7 @@ public class CarAgent : Agent
 
     public float speedRewardMultiplier = 1;
     public float reversePenalty = 0.1f;
+    public float timePenalty = -0.01f;
     public float maxWaypointDistance = 100f;
     
     public Vector3[] spawnPoints;
@@ -148,6 +149,8 @@ public class CarAgent : Agent
         if(Input.GetKey(KeyCode.Space)){
           discreteActionsOut[4] = 1;
         }
+
+        AddReward(timePenalty);
     }
 
     void OnTriggerEnter(Collider other) {
