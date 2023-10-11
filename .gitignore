@@ -13,7 +13,7 @@
 
 #My own exclusions
 /Assets/ADG_Textures*
-/venv
+/venv/
 /results*
 
 # MemoryCaptures can get excessive in size.
