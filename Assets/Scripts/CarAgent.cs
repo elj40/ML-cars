@@ -46,11 +46,12 @@ public class CarAgent : Agent
           newPos = spawnPoints[0];
           newAngle = 180f;
         }
-
         if (trackChoice == Track.Right) {
           newPos = spawnPoints[1];
           newAngle = 0f;
         } 
+
+        targetWaypoint = transform.parent.gameObject.transform.Find("WaypointManager").transform.GetChild(0);
 
         GetComponent<Rigidbody>().velocity = Vector3.zero;
         GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
@@ -176,7 +177,7 @@ public class CarAgent : Agent
         waypointsReached += 1;
         AddReward(10f*waypointsReached);
         groundMesh.sharedMaterial = winMaterial;
-        Debug.Log("Hit waypoint");
+        Debug.Log("Added waypoint reward: "+(10f*waypointsReached).ToString());
         
         WaypointBehaviour wpB = other.GetComponent<WaypointBehaviour>();
         if (wpB.nextWaypoint != null) {
@@ -187,7 +188,7 @@ public class CarAgent : Agent
         }
       }
       else if (other.tag == "Wall") {
-        SetReward(-10f);
+        AddReward(-20f);
         groundMesh.sharedMaterial = failMaterial;
         EndEpisode();
       }
