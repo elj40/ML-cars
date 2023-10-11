@@ -18,3 +18,8 @@ public class WaypointBehaviour : MonoBehaviour
         }
     }
 }
+
+public enum Track {
+    Left,
+    Right
+}

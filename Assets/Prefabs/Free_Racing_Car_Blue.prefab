@@ -158,11 +158,14 @@ MonoBehaviour:
   groundMesh: {fileID: 0}
   failMaterial: {fileID: 2100000, guid: f81f9b1d2bc28734cb4714cd65627f26, type: 2}
   winMaterial: {fileID: 2100000, guid: 14270b4fdb4e10343bb7f0cf1c2ae318, type: 2}
+  trackChoice: 0
   speedRewardMultiplier: 0
   reversePenalty: 0.05
   timePenalty: -0.01
   maxWaypointDistance: 100
-  spawnPoints: []
+  spawnPoints:
+  - {x: -26, y: 0.1, z: -10}
+  - {x: -26, y: 0.1, z: 10}
   inputs:
   - 0
   - 0

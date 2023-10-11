@@ -13,7 +13,7 @@ public class CarAgent : Agent
     public Material failMaterial;
     public Material winMaterial; 
 
-
+    public Track trackChoice;
     public float speedRewardMultiplier = 1;
     public float reversePenalty = 0.1f;
     public float timePenalty = -0.01f;
@@ -35,13 +35,24 @@ public class CarAgent : Agent
     {
         // Reset the state of the agent for a new episode here.
         //float ranAngle = Random.Range(90f, 270f);
-        int ranI = Random.Range(0, spawnPoints.Length);
+        Vector3 newPos = spawnPoints[0];
+        float newAngle = 0f;
+
+        if (trackChoice == Track.Left) {
+          newPos = spawnPoints[0];
+          newAngle = 180f;
+        }
+
+        if (trackChoice == Track.Right) {
+          newPos = spawnPoints[1];
+          newAngle = 0f;
+        } 
 
         GetComponent<Rigidbody>().velocity = Vector3.zero;
         GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
 
-        Car.transform.localPosition = spawnPoints[ranI];
-        Car.transform.rotation = Quaternion.Euler(0, 180f, 0);
+        Car.transform.localPosition = newPos;
+        Car.transform.rotation = Quaternion.Euler(0, newAngle, 0);
     }
 
     public override void CollectObservations(VectorSensor sensor)
