@@ -18,12 +18,16 @@ public class CarAgent : Agent
     public float reversePenalty = 0.1f;
     public float timePenalty = -0.01f;
     public float maxWaypointDistance = 100f;
+    public int waypointsReached = 0;
     
     public Vector3[] spawnPoints;
 
+
     [HideInInspector]
     public float[] inputs = new float[6];
+    [HideInInspector]
     public float[] outputs = new float[5];
+    [HideInInspector]
     private int previousSpacePressed;
 
     public override void Initialize()
@@ -138,7 +142,7 @@ public class CarAgent : Agent
         float speedReward = (controller.carSpeed/controller.maxSpeed) * speedRewardMultiplier;
         AddReward(speedReward);
 
-        AddReward(timePenalty);
+        //AddReward(timePenalty);
 
 
     }
@@ -168,7 +172,9 @@ public class CarAgent : Agent
 
     void OnTriggerEnter(Collider other) {
       if (other.tag == "Waypoint" && other.transform == targetWaypoint) {
-        AddReward(10f);
+        
+        waypointsReached += 1;
+        AddReward(10f*waypointsReached);
         groundMesh.sharedMaterial = winMaterial;
         Debug.Log("Hit waypoint");
         
