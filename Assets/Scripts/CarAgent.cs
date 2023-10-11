@@ -54,8 +54,8 @@ public class CarAgent : Agent
         float targetDotPerpendicular = Vector3.Dot(Vector3.right, toTargetNorm);
         float toTargetMag = toTarget.magnitude/maxWaypointDistance; 
 
-        sensor.AddObservation(targetDot);
-        sensor.AddObservation(targetDotPerpendicular);
+        sensor.AddObservation(map(targetDot,-1,1,0,1));
+        sensor.AddObservation(map(targetDotPerpendicular,-1,1,0,1));
         sensor.AddObservation(toTargetMag);
 
         WaypointBehaviour wpB = targetWaypoint.gameObject.GetComponent<WaypointBehaviour>();
@@ -65,7 +65,7 @@ public class CarAgent : Agent
         sensor.AddObservation(toNextWPDot90);
 
         PrometeoCarController controller = Car.GetComponent<PrometeoCarController>();
-        sensor.AddObservation(controller.carSpeed);
+        sensor.AddObservation(controller.carSpeed/controller.maxSpeed);
     }
 
     public override void OnActionReceived(ActionBuffers vectorAction)
@@ -85,7 +85,6 @@ public class CarAgent : Agent
           controller.CancelInvoke("DecelerateCar");
           controller.deceleratingCar = false;
           controller.GoReverse();
-          AddReward(-1f * reversePenalty);
         }
         //A: Left
         if(discreteActions[2] == 1){
@@ -127,7 +126,6 @@ public class CarAgent : Agent
         float speedReward = (controller.carSpeed/controller.maxSpeed) * speedRewardMultiplier;
         AddReward(speedReward);
 
-        AddReward(-0.001f);
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -172,6 +170,12 @@ public class CarAgent : Agent
         EndEpisode();
       }
     }
+
+    //From unity forum, by mgear
+    float map(float s, float a1, float a2, float b1, float b2)
+  {
+      return b1 + (s-a1)*(b2-b1)/(a2-a1);
+  } 
 
 }
 
