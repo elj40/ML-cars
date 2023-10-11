@@ -127,6 +127,9 @@ public class CarAgent : Agent
         float speedReward = (controller.carSpeed/controller.maxSpeed) * speedRewardMultiplier;
         AddReward(speedReward);
 
+        AddReward(timePenalty);
+
+
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -150,7 +153,6 @@ public class CarAgent : Agent
           discreteActionsOut[4] = 1;
         }
 
-        AddReward(timePenalty);
     }
 
     void OnTriggerEnter(Collider other) {

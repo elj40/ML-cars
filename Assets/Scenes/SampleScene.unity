@@ -877,6 +877,10 @@ PrefabInstance:
       propertyPath: groundMesh
       value: 
       objectReference: {fileID: 33059128}
+    - target: {fileID: 2431139676890021812, guid: bc1d34f7b76df9e41919d5df407e342a, type: 3}
+      propertyPath: speedRewardMultiplier
+      value: 0.02
+      objectReference: {fileID: 0}
     - target: {fileID: 2431139677262387372, guid: bc1d34f7b76df9e41919d5df407e342a, type: 3}
       propertyPath: m_RootOrder
       value: 2

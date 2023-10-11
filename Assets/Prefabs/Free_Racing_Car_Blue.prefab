@@ -160,6 +160,7 @@ MonoBehaviour:
   winMaterial: {fileID: 2100000, guid: 14270b4fdb4e10343bb7f0cf1c2ae318, type: 2}
   speedRewardMultiplier: 0
   reversePenalty: 0.05
+  timePenalty: -0.01
   maxWaypointDistance: 100
   spawnPoints: []
   inputs:
