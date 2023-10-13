@@ -70,7 +70,7 @@ public class CarAgent : Agent
       PrometeoCarController controller = Car.GetComponent<PrometeoCarController>();
       float speed = controller.carSpeed/controller.maxSpeed;
       if (speed < 0.1f) {
-        AddReward(-0.5f);
+        AddReward(-0.2f);
       }
     }
 
@@ -206,7 +206,7 @@ public class CarAgent : Agent
           EndEpisode();
         }
 
-        EndEpisode();
+        //EndEpisode();
       }
       else if (other.tag == "Wall") {
         SetReward(-1f);

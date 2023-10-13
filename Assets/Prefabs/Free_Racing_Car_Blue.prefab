@@ -159,6 +159,8 @@ MonoBehaviour:
   roadMaterial: {fileID: 2100000, guid: 14270b4fdb4e10343bb7f0cf1c2ae318, type: 2}
   failMaterial: {fileID: 2100000, guid: f81f9b1d2bc28734cb4714cd65627f26, type: 2}
   winMaterial: {fileID: 2100000, guid: bf2f57b6fb8816a42ad5047d98f240c6, type: 2}
+  totalReward: 0
+  timeSpent: 0
   timeLimit: 80
   speedRewardMultiplier: 0.1
   reversePenalty: 0.05
@@ -167,7 +169,6 @@ MonoBehaviour:
   spawnPoints:
   - {x: -26, y: 0.1, z: -10}
   - {x: -26, y: 0.1, z: 10}
-  totalReward: 0
   inputs:
   - {x: -26, y: 0.1, z: -10}
   - {x: -26, y: 0.1, z: 10}
@@ -718,7 +719,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: d01ec8474f59008408b5a5f97e467116, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0
+  m_Volume: 0.539
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -1001,7 +1002,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 55a5fe0d71211ff40a34c5123261573c, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0
+  m_Volume: 0.212
   m_Pitch: 1
   Loop: 0
   Mute: 0
