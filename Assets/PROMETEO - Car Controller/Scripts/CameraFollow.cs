@@ -18,7 +18,7 @@ public class CameraFollow : MonoBehaviour {
 		initialCameraPosition = gameObject.transform.position;
 		initialCarPosition = carTransform.position;
 		absoluteInitCameraPosition = initialCameraPosition - initialCarPosition;
-		Application.targetFrameRate = 12;
+		Application.targetFrameRate = 60;
 	}
 
 	void FixedUpdate()
