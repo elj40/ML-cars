@@ -14,6 +14,7 @@ public class CarAgent : Agent
     public Material winMaterial; 
 
     public Track trackChoice;
+    public float timeLimit = 3f;
     public float speedRewardMultiplier = 1;
     public float reversePenalty = 0.1f;
     public float timePenalty = -0.01f;
@@ -22,9 +23,12 @@ public class CarAgent : Agent
     
     public Vector3[] spawnPoints;
 
+    public float totalReward = 0;
+    private float timeSpent = 0f;
 
-    [HideInInspector]
-    public float[] inputs = new float[6];
+
+    //[HideInInspector]
+    public Vector3[] inputs = new Vector3[2];
     [HideInInspector]
     public float[] outputs = new float[5];
     [HideInInspector]
@@ -38,26 +42,19 @@ public class CarAgent : Agent
     public override void OnEpisodeBegin()
     {
         // Reset the state of the agent for a new episode here.
-        //float ranAngle = Random.Range(90f, 270f);
-        Vector3 newPos = spawnPoints[0];
-        float newAngle = 0f;
 
-        if (trackChoice == Track.Left) {
-          newPos = spawnPoints[0];
-          newAngle = 180f;
-        }
-        if (trackChoice == Track.Right) {
-          newPos = spawnPoints[1];
-          newAngle = 0f;
-        } 
+        //Debug.Log("New Episode");
+        waypointsReached = 0;
 
-        targetWaypoint = transform.parent.gameObject.transform.Find("WaypointManager").transform.GetChild(0);
+        timeSpent = 0f;
 
-        GetComponent<Rigidbody>().velocity = Vector3.zero;
-        GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
 
-        Car.transform.localPosition = newPos;
-        Car.transform.rotation = Quaternion.Euler(0, newAngle, 0);
+    }
+
+    public void Update() {
+      timeSpent += Time.deltaTime;
+      if (timeSpent > timeLimit) 
+        EndEpisode();
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -75,18 +72,22 @@ public class CarAgent : Agent
         sensor.AddObservation(map(targetDotPerpendicular,-1,1,0,1));
         sensor.AddObservation(toTargetMag);
 
+        inputs[0] = new Vector3(map(targetDot,-1,1,0,1), map(targetDotPerpendicular,-1,1,0,1), toTargetMag);
+
         WaypointBehaviour wpB = targetWaypoint.gameObject.GetComponent<WaypointBehaviour>();
         float toNextWPDot = Vector3.Dot(Vector3.forward, wpB.toNextWayPoint.normalized);
         float toNextWPDot90 = Vector3.Dot(Vector3.right, wpB.toNextWayPoint.normalized);
         sensor.AddObservation(toNextWPDot);
         sensor.AddObservation(toNextWPDot90);
 
+
         PrometeoCarController controller = Car.GetComponent<PrometeoCarController>();
         sensor.AddObservation(controller.carSpeed/controller.maxSpeed);
+        inputs[1] = new Vector3(toNextWPDot, toNextWPDot90, controller.carSpeed/controller.maxSpeed);
     }
 
     public override void OnActionReceived(ActionBuffers vectorAction)
-    {
+    {   
         // Define the agent's behavior based on the actions received here.
         var discreteActions = vectorAction.DiscreteActions;
         PrometeoCarController controller = Car.GetComponent<PrometeoCarController>();
@@ -141,9 +142,12 @@ public class CarAgent : Agent
 
         //Add speed reward
         float speedReward = (controller.carSpeed/controller.maxSpeed) * speedRewardMultiplier;
-        AddReward(speedReward);
+        //AddReward(speedReward);
+
+        totalReward += speedReward;
 
         //AddReward(timePenalty);
+        //totalReward += timePenalty;
 
 
     }
@@ -174,31 +178,45 @@ public class CarAgent : Agent
     void OnTriggerEnter(Collider other) {
       if (other.tag == "Waypoint" && other.transform == targetWaypoint) {
         
-        waypointsReached += 1;
-        AddReward(10f*waypointsReached);
-        groundMesh.sharedMaterial = winMaterial;
-        Debug.Log("Added waypoint reward: "+(10f*waypointsReached).ToString());
-        
-        WaypointBehaviour wpB = other.GetComponent<WaypointBehaviour>();
-        if (wpB.nextWaypoint != null) {
-          targetWaypoint = wpB.nextWaypoint;
-        }else {
-          Debug.Log("Finished Track");
-          EndEpisode();
-        }
+        SetReward(1f);
+        targetWaypoint = other.transform.gameObject.GetComponent<WaypointBehaviour>().nextWaypoint;
+        EndEpisode();
       }
       else if (other.tag == "Wall") {
-        AddReward(-20f);
+        SetReward(-1f);
+        //totalReward -= 20f;
         groundMesh.sharedMaterial = failMaterial;
+        spawnAtStart();
+        targetWaypoint = transform.parent.gameObject.transform.Find("WaypointManager").transform.GetChild(0);
         EndEpisode();
       }
     }
 
     //From unity forum, by mgear
     float map(float s, float a1, float a2, float b1, float b2)
-  {
-      return b1 + (s-a1)*(b2-b1)/(a2-a1);
-  } 
+    {
+        return b1 + (s-a1)*(b2-b1)/(a2-a1);
+    } 
+
+    void spawnAtStart() {
+        Vector3 newPos = spawnPoints[0];
+        float newAngle = 0f;
+
+        if (trackChoice == Track.Left) {
+          newPos = spawnPoints[0];
+          newAngle = 180f;
+        }
+        if (trackChoice == Track.Right) {
+          newPos = spawnPoints[1];
+          newAngle = 0f;
+        }         
+        
+        Car.transform.localPosition = newPos;
+        Car.transform.rotation = Quaternion.Euler(0, newAngle, 0);
+
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
+        GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+    }
 
 }
 
