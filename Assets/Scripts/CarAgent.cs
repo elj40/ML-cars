@@ -16,6 +16,8 @@ public class CarAgent : Agent
 
     public float totalReward = 0;
 
+    public float timeSpent = 0f;
+
     public float timeLimit = 80f;
     //[HideInInspector]
     public float speedRewardMultiplier = 1;
@@ -29,7 +31,6 @@ public class CarAgent : Agent
 
     //[HideInInspector]
     //[HideInInspector]
-    private float timeSpent = 0f;
 
 
     //[HideInInspector]
@@ -69,8 +70,7 @@ public class CarAgent : Agent
       PrometeoCarController controller = Car.GetComponent<PrometeoCarController>();
       float speed = controller.carSpeed/controller.maxSpeed;
       if (speed < 0.1f) {
-        AddReward(-2f);
-        EndEpisode();
+        AddReward(-0.5f);
       }
     }
 
