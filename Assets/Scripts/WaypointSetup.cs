@@ -14,6 +14,10 @@ public class WaypointSetup : MonoBehaviour
             wpB.nextWaypoint = transform.GetChild(i+1);
             wpB.findNextPoint();
         }
+
+        WaypointBehaviour last = transform.GetChild(transform.childCount-1).GetComponent<WaypointBehaviour>();
+        last.nextWaypoint = transform.GetChild(0);
+        last.findNextPoint();
     }
 
 }

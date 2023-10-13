@@ -14,9 +14,10 @@ public class CarAgent : Agent
     public Material failMaterial;
     public Material winMaterial; 
 
-    public Track trackChoice;
+    public float totalReward = 0;
+
     public float timeLimit = 80f;
-    [HideInInspector]
+    //[HideInInspector]
     public float speedRewardMultiplier = 1;
     [HideInInspector]
     public float reversePenalty = 0.1f;
@@ -26,8 +27,7 @@ public class CarAgent : Agent
     
     public Vector3[] spawnPoints;
 
-    [HideInInspector]
-    public float totalReward = 0;
+    //[HideInInspector]
     //[HideInInspector]
     private float timeSpent = 0f;
 
@@ -52,7 +52,7 @@ public class CarAgent : Agent
 
 
         timeSpent = 0f;
-
+        totalReward = 0f;
 
     }
 
@@ -63,6 +63,13 @@ public class CarAgent : Agent
         spawnAtStart();
         groundMesh.sharedMaterial = roadMaterial;
 
+        EndEpisode();
+      }
+
+      PrometeoCarController controller = Car.GetComponent<PrometeoCarController>();
+      float speed = controller.carSpeed/controller.maxSpeed;
+      if (speed < 0.1f) {
+        AddReward(-2f);
         EndEpisode();
       }
     }
@@ -152,16 +159,12 @@ public class CarAgent : Agent
 
         //Add speed reward
         float speedReward = (controller.carSpeed/controller.maxSpeed) * speedRewardMultiplier;
-        //AddReward(speedReward);
+        AddReward(speedReward);
 
         totalReward += speedReward;
 
         //AddReward(timePenalty);
         //totalReward += timePenalty;
-
-
-        AddReward(timePenalty);
-
 
     }
 
@@ -193,7 +196,7 @@ public class CarAgent : Agent
         
         groundMesh.sharedMaterial = winMaterial;
 
-        SetReward(1f);
+        AddReward(1f);
         Transform nextWp = other.transform.gameObject.GetComponent<WaypointBehaviour>().nextWaypoint;
         if (nextWp != null)
           targetWaypoint = nextWp;
@@ -222,16 +225,16 @@ public class CarAgent : Agent
 
     void spawnAtStart() {
         Vector3 newPos = spawnPoints[0];
-        float newAngle = 0f;
+        float newAngle = 180f;
 
-        if (trackChoice == Track.Left) {
-          newPos = spawnPoints[0];
-          newAngle = 180f;
-        }
-        if (trackChoice == Track.Right) {
-          newPos = spawnPoints[1];
-          newAngle = 0f;
-        }         
+        // if (trackChoice == Track.Left) {
+        //   newPos = spawnPoints[0];
+        //   newAngle = 180f;
+        // }
+        // if (trackChoice == Track.Right) {
+        //   newPos = spawnPoints[1];
+        //   newAngle = 0f;
+        // }         
         
         Car.transform.localPosition = newPos;
         Car.transform.rotation = Quaternion.Euler(0, newAngle, 0);

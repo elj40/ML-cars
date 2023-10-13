@@ -159,9 +159,8 @@ MonoBehaviour:
   roadMaterial: {fileID: 2100000, guid: 14270b4fdb4e10343bb7f0cf1c2ae318, type: 2}
   failMaterial: {fileID: 2100000, guid: f81f9b1d2bc28734cb4714cd65627f26, type: 2}
   winMaterial: {fileID: 2100000, guid: bf2f57b6fb8816a42ad5047d98f240c6, type: 2}
-  trackChoice: 0
   timeLimit: 80
-  speedRewardMultiplier: 0
+  speedRewardMultiplier: 0.1
   reversePenalty: 0.05
   timePenalty: -0.01
   maxWaypointDistance: 100
