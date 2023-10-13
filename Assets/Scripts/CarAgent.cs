@@ -32,7 +32,7 @@ public class CarAgent : Agent
     private float timeSpent = 0f;
 
 
-    [HideInInspector]
+    //[HideInInspector]
     public Vector3[] inputs = new Vector3[2];
     [HideInInspector]
     public float[] outputs = new float[5];
@@ -74,27 +74,26 @@ public class CarAgent : Agent
         Vector3 toTargetNorm = toTarget.normalized;
 
 
-        float targetDot = Vector3.Dot(Vector3.forward, toTargetNorm);
-        float targetDotPerpendicular = Vector3.Dot(Vector3.right, toTargetNorm);
+        float targetDot = Vector3.Dot(transform.rotation * Vector3.forward, toTargetNorm);
+        float targetDotPerpendicular = Vector3.Dot(transform.rotation * Vector3.right, toTargetNorm);
         float toTargetMag = toTarget.magnitude/maxWaypointDistance; 
 
         sensor.AddObservation(map(targetDot,-1,1,0,1));
         sensor.AddObservation(map(targetDotPerpendicular,-1,1,0,1));
         sensor.AddObservation(toTargetMag);
 
-
         WaypointBehaviour wpB = targetWaypoint.gameObject.GetComponent<WaypointBehaviour>();
-        float toNextWPDot = Vector3.Dot(Vector3.forward, wpB.toNextWayPoint.normalized);
-        float toNextWPDot90 = Vector3.Dot(Vector3.right, wpB.toNextWayPoint.normalized);
-        sensor.AddObservation(toNextWPDot);
-        sensor.AddObservation(toNextWPDot90);
-
+        float toNextWPDot = Vector3.Dot(transform.rotation * Vector3.forward, wpB.toNextWayPoint.normalized);
+        float toNextWPDot90 = Vector3.Dot(transform.rotation * Vector3.right, wpB.toNextWayPoint.normalized);
+        sensor.AddObservation(map(toNextWPDot,-1,1,0,1));
+        sensor.AddObservation(map(toNextWPDot90,-1,1,0,1));
 
         PrometeoCarController controller = Car.GetComponent<PrometeoCarController>();
         sensor.AddObservation(controller.carSpeed/controller.maxSpeed);
-       
+
         inputs[0] = new Vector3(map(targetDot,-1,1,0,1), map(targetDotPerpendicular,-1,1,0,1), toTargetMag);
-        inputs[1] = new Vector3(toNextWPDot, toNextWPDot90, controller.carSpeed/controller.maxSpeed);
+        inputs[1] = new Vector3(map(toNextWPDot,-1,1,0,1), map(toNextWPDot90,-1,1,0,1), controller.carSpeed/controller.maxSpeed);
+
     }
 
     public override void OnActionReceived(ActionBuffers vectorAction)
@@ -192,7 +191,15 @@ public class CarAgent : Agent
         groundMesh.sharedMaterial = winMaterial;
 
         SetReward(1f);
-        targetWaypoint = other.transform.gameObject.GetComponent<WaypointBehaviour>().nextWaypoint;
+        Transform nextWp = other.transform.gameObject.GetComponent<WaypointBehaviour>().nextWaypoint;
+        if (nextWp != null)
+          targetWaypoint = nextWp;
+        else {
+          spawnAtStart();
+          SetReward(5f);
+          EndEpisode();
+        }
+
         EndEpisode();
       }
       else if (other.tag == "Wall") {

@@ -11,7 +11,7 @@ public class WaypointBehaviour : MonoBehaviour
 
     public void findNextPoint() {
         if (nextWaypoint != null) {
-            Vector3 diff = this.transform.position - nextWaypoint.position;
+            Vector3 diff = nextWaypoint.position - transform.position;
             Vector3 diffNorm = diff.normalized;
 
             toNextWayPoint = diffNorm;
