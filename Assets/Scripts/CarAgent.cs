@@ -10,20 +10,33 @@ public class CarAgent : Agent
     public GameObject Car;
     public Transform targetWaypoint;
     public MeshRenderer groundMesh;
+    public Material roadMaterial;
     public Material failMaterial;
     public Material winMaterial; 
 
-
+    public Track trackChoice;
+    public float timeLimit = 80f;
+    [HideInInspector]
     public float speedRewardMultiplier = 1;
+    [HideInInspector]
     public float reversePenalty = 0.1f;
+    [HideInInspector]
     public float timePenalty = -0.01f;
     public float maxWaypointDistance = 100f;
     
     public Vector3[] spawnPoints;
 
     [HideInInspector]
-    public float[] inputs = new float[6];
+    public float totalReward = 0;
+    //[HideInInspector]
+    private float timeSpent = 0f;
+
+
+    //[HideInInspector]
+    public Vector3[] inputs = new Vector3[2];
+    [HideInInspector]
     public float[] outputs = new float[5];
+    [HideInInspector]
     private int previousSpacePressed;
 
     public override void Initialize()
@@ -34,14 +47,24 @@ public class CarAgent : Agent
     public override void OnEpisodeBegin()
     {
         // Reset the state of the agent for a new episode here.
-        //float ranAngle = Random.Range(90f, 270f);
-        int ranI = Random.Range(0, spawnPoints.Length);
 
-        GetComponent<Rigidbody>().velocity = Vector3.zero;
-        GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        //Debug.Log("New Episode");
 
-        Car.transform.localPosition = spawnPoints[ranI];
-        Car.transform.rotation = Quaternion.Euler(0, 180f, 0);
+
+        timeSpent = 0f;
+
+
+    }
+
+    public void Update() {
+      timeSpent += Time.deltaTime;
+      if (timeSpent > timeLimit) {
+        SetReward(-1f);
+        spawnAtStart();
+        groundMesh.sharedMaterial = roadMaterial;
+
+        EndEpisode();
+      }
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -51,8 +74,8 @@ public class CarAgent : Agent
         Vector3 toTargetNorm = toTarget.normalized;
 
 
-        float targetDot = Vector3.Dot(Vector3.forward, toTargetNorm);
-        float targetDotPerpendicular = Vector3.Dot(Vector3.right, toTargetNorm);
+        float targetDot = Vector3.Dot(transform.rotation * Vector3.forward, toTargetNorm);
+        float targetDotPerpendicular = Vector3.Dot(transform.rotation * Vector3.right, toTargetNorm);
         float toTargetMag = toTarget.magnitude/maxWaypointDistance; 
 
         sensor.AddObservation(map(targetDot,-1,1,0,1));
@@ -60,17 +83,21 @@ public class CarAgent : Agent
         sensor.AddObservation(toTargetMag);
 
         WaypointBehaviour wpB = targetWaypoint.gameObject.GetComponent<WaypointBehaviour>();
-        float toNextWPDot = Vector3.Dot(Vector3.forward, wpB.toNextWayPoint.normalized);
-        float toNextWPDot90 = Vector3.Dot(Vector3.right, wpB.toNextWayPoint.normalized);
-        sensor.AddObservation(toNextWPDot);
-        sensor.AddObservation(toNextWPDot90);
+        float toNextWPDot = Vector3.Dot(transform.rotation * Vector3.forward, wpB.toNextWayPoint.normalized);
+        float toNextWPDot90 = Vector3.Dot(transform.rotation * Vector3.right, wpB.toNextWayPoint.normalized);
+        sensor.AddObservation(map(toNextWPDot,-1,1,0,1));
+        sensor.AddObservation(map(toNextWPDot90,-1,1,0,1));
 
         PrometeoCarController controller = Car.GetComponent<PrometeoCarController>();
         sensor.AddObservation(controller.carSpeed/controller.maxSpeed);
+
+        inputs[0] = new Vector3(map(targetDot,-1,1,0,1), map(targetDotPerpendicular,-1,1,0,1), toTargetMag);
+        inputs[1] = new Vector3(map(toNextWPDot,-1,1,0,1), map(toNextWPDot90,-1,1,0,1), controller.carSpeed/controller.maxSpeed);
+
     }
 
     public override void OnActionReceived(ActionBuffers vectorAction)
-    {
+    {   
         // Define the agent's behavior based on the actions received here.
         var discreteActions = vectorAction.DiscreteActions;
         PrometeoCarController controller = Car.GetComponent<PrometeoCarController>();
@@ -125,7 +152,13 @@ public class CarAgent : Agent
 
         //Add speed reward
         float speedReward = (controller.carSpeed/controller.maxSpeed) * speedRewardMultiplier;
-        AddReward(speedReward);
+        //AddReward(speedReward);
+
+        totalReward += speedReward;
+
+        //AddReward(timePenalty);
+        //totalReward += timePenalty;
+
 
         AddReward(timePenalty);
 
@@ -157,30 +190,56 @@ public class CarAgent : Agent
 
     void OnTriggerEnter(Collider other) {
       if (other.tag == "Waypoint" && other.transform == targetWaypoint) {
-        AddReward(10f);
-        groundMesh.sharedMaterial = winMaterial;
-        Debug.Log("Hit waypoint");
         
-        WaypointBehaviour wpB = other.GetComponent<WaypointBehaviour>();
-        if (wpB.nextWaypoint != null) {
-          targetWaypoint = wpB.nextWaypoint;
-        }else {
-          Debug.Log("Finished Track");
+        groundMesh.sharedMaterial = winMaterial;
+
+        SetReward(1f);
+        Transform nextWp = other.transform.gameObject.GetComponent<WaypointBehaviour>().nextWaypoint;
+        if (nextWp != null)
+          targetWaypoint = nextWp;
+        else {
+          spawnAtStart();
+          SetReward(5f);
           EndEpisode();
         }
+
+        EndEpisode();
       }
       else if (other.tag == "Wall") {
-        SetReward(-10f);
+        SetReward(-1f);
+        //totalReward -= 20f;
         groundMesh.sharedMaterial = failMaterial;
+        spawnAtStart();
         EndEpisode();
       }
     }
 
     //From unity forum, by mgear
     float map(float s, float a1, float a2, float b1, float b2)
-  {
-      return b1 + (s-a1)*(b2-b1)/(a2-a1);
-  } 
+    {
+        return b1 + (s-a1)*(b2-b1)/(a2-a1);
+    } 
+
+    void spawnAtStart() {
+        Vector3 newPos = spawnPoints[0];
+        float newAngle = 0f;
+
+        if (trackChoice == Track.Left) {
+          newPos = spawnPoints[0];
+          newAngle = 180f;
+        }
+        if (trackChoice == Track.Right) {
+          newPos = spawnPoints[1];
+          newAngle = 0f;
+        }         
+        
+        Car.transform.localPosition = newPos;
+        Car.transform.rotation = Quaternion.Euler(0, newAngle, 0);
+
+        GetComponent<Rigidbody>().velocity = Vector3.zero;
+        GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        targetWaypoint = transform.parent.gameObject.transform.Find("WaypointManager").transform.GetChild(0);
+    }
 
 }
 

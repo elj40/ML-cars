@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class WaypointSetup : MonoBehaviour
 {
+    public Transform firstWaypoint;
     void Start()
     {
         for (int i = 0; i < transform.childCount-1; i++) {
