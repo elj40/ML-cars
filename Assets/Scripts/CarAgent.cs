@@ -82,7 +82,6 @@ public class CarAgent : Agent
         sensor.AddObservation(map(targetDotPerpendicular,-1,1,0,1));
         sensor.AddObservation(toTargetMag);
 
-        inputs[0] = new Vector3(map(targetDot,-1,1,0,1), map(targetDotPerpendicular,-1,1,0,1), toTargetMag);
 
         WaypointBehaviour wpB = targetWaypoint.gameObject.GetComponent<WaypointBehaviour>();
         float toNextWPDot = Vector3.Dot(Vector3.forward, wpB.toNextWayPoint.normalized);
@@ -93,6 +92,8 @@ public class CarAgent : Agent
 
         PrometeoCarController controller = Car.GetComponent<PrometeoCarController>();
         sensor.AddObservation(controller.carSpeed/controller.maxSpeed);
+       
+        inputs[0] = new Vector3(map(targetDot,-1,1,0,1), map(targetDotPerpendicular,-1,1,0,1), toTargetMag);
         inputs[1] = new Vector3(toNextWPDot, toNextWPDot90, controller.carSpeed/controller.maxSpeed);
     }
 
