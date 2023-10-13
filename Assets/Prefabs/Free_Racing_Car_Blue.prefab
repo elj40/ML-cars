@@ -156,9 +156,11 @@ MonoBehaviour:
   Car: {fileID: 4588466963864825058}
   targetWaypoint: {fileID: 0}
   groundMesh: {fileID: 0}
+  roadMaterial: {fileID: 2100000, guid: 14270b4fdb4e10343bb7f0cf1c2ae318, type: 2}
   failMaterial: {fileID: 2100000, guid: f81f9b1d2bc28734cb4714cd65627f26, type: 2}
-  winMaterial: {fileID: 2100000, guid: 14270b4fdb4e10343bb7f0cf1c2ae318, type: 2}
+  winMaterial: {fileID: 2100000, guid: bf2f57b6fb8816a42ad5047d98f240c6, type: 2}
   trackChoice: 0
+  timeLimit: 80
   speedRewardMultiplier: 0
   reversePenalty: 0.05
   timePenalty: -0.01
@@ -166,13 +168,14 @@ MonoBehaviour:
   spawnPoints:
   - {x: -26, y: 0.1, z: -10}
   - {x: -26, y: 0.1, z: 10}
+  totalReward: 0
   inputs:
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
+  - {x: -26, y: 0.1, z: -10}
+  - {x: -26, y: 0.1, z: 10}
+  - {x: 5.1927736e-11, y: 1.0687867e-38, z: 0}
+  - {x: 0, y: 2.604e-42, z: 1e-45}
+  - {x: 0, y: 2.615e-42, z: 7e-45}
+  - {x: 0, y: 2.625e-42, z: 1e-45}
   outputs:
   - 0
   - 0

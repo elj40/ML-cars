@@ -10,24 +10,29 @@ public class CarAgent : Agent
     public GameObject Car;
     public Transform targetWaypoint;
     public MeshRenderer groundMesh;
+    public Material roadMaterial;
     public Material failMaterial;
     public Material winMaterial; 
 
     public Track trackChoice;
-    public float timeLimit = 3f;
+    public float timeLimit = 80f;
+    [HideInInspector]
     public float speedRewardMultiplier = 1;
+    [HideInInspector]
     public float reversePenalty = 0.1f;
+    [HideInInspector]
     public float timePenalty = -0.01f;
     public float maxWaypointDistance = 100f;
-    public int waypointsReached = 0;
     
     public Vector3[] spawnPoints;
 
+    [HideInInspector]
     public float totalReward = 0;
+    //[HideInInspector]
     private float timeSpent = 0f;
 
 
-    //[HideInInspector]
+    [HideInInspector]
     public Vector3[] inputs = new Vector3[2];
     [HideInInspector]
     public float[] outputs = new float[5];
@@ -44,7 +49,7 @@ public class CarAgent : Agent
         // Reset the state of the agent for a new episode here.
 
         //Debug.Log("New Episode");
-        waypointsReached = 0;
+
 
         timeSpent = 0f;
 
@@ -53,8 +58,13 @@ public class CarAgent : Agent
 
     public void Update() {
       timeSpent += Time.deltaTime;
-      if (timeSpent > timeLimit) 
+      if (timeSpent > timeLimit) {
+        SetReward(-1f);
+        spawnAtStart();
+        groundMesh.sharedMaterial = roadMaterial;
+
         EndEpisode();
+      }
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -178,6 +188,8 @@ public class CarAgent : Agent
     void OnTriggerEnter(Collider other) {
       if (other.tag == "Waypoint" && other.transform == targetWaypoint) {
         
+        groundMesh.sharedMaterial = winMaterial;
+
         SetReward(1f);
         targetWaypoint = other.transform.gameObject.GetComponent<WaypointBehaviour>().nextWaypoint;
         EndEpisode();
@@ -187,7 +199,6 @@ public class CarAgent : Agent
         //totalReward -= 20f;
         groundMesh.sharedMaterial = failMaterial;
         spawnAtStart();
-        targetWaypoint = transform.parent.gameObject.transform.Find("WaypointManager").transform.GetChild(0);
         EndEpisode();
       }
     }
@@ -216,6 +227,7 @@ public class CarAgent : Agent
 
         GetComponent<Rigidbody>().velocity = Vector3.zero;
         GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        targetWaypoint = transform.parent.gameObject.transform.Find("WaypointManager").transform.GetChild(0);
     }
 
 }
