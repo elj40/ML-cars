@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4588466963694718581}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Wheels
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -46,9 +46,9 @@ GameObject:
   - component: {fileID: 7786654485524287013}
   - component: {fileID: 7786654485524287019}
   - component: {fileID: 7786654485524287017}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Free_Racing_Car_Blue
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -154,10 +154,8 @@ MonoBehaviour:
   hasUpgradedFromAgentParameters: 1
   MaxStep: 0
   Car: {fileID: 4588466963864825058}
-  targetWaypoint: {fileID: 0}
-  groundMesh: {fileID: 0}
-  roadMaterial: {fileID: 2100000, guid: 14270b4fdb4e10343bb7f0cf1c2ae318, type: 2}
-  failMaterial: {fileID: 2100000, guid: f81f9b1d2bc28734cb4714cd65627f26, type: 2}
+  waypointManager: {fileID: 0}
+  failMaterial: {fileID: 2100000, guid: 360498ef61eff2e4da914728e091671b, type: 2}
   winMaterial: {fileID: 2100000, guid: bf2f57b6fb8816a42ad5047d98f240c6, type: 2}
   totalReward: 0
   timeSpent: 0
@@ -172,12 +170,7 @@ MonoBehaviour:
   inputs:
   - {x: -26, y: 0.1, z: -10}
   - {x: -26, y: 0.1, z: 10}
-  outputs:
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
+  outputs: 0000000000000000000000000000000000000000
 --- !u!114 &7786654485524287019
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,7 +226,7 @@ GameObject:
   - component: {fileID: 4588466964020490557}
   - component: {fileID: 4588466964020490559}
   - component: {fileID: 4588466964020490556}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: FrontRightWheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -314,7 +307,7 @@ GameObject:
   - component: {fileID: 4588466964262656957}
   - component: {fileID: 4588466964262656959}
   - component: {fileID: 4588466964262656956}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: FrontLeftWheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -395,7 +388,7 @@ GameObject:
   - component: {fileID: 4588466964812268406}
   - component: {fileID: 4588466964812268408}
   - component: {fileID: 4588466964812268409}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: RearLeftWheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -476,7 +469,7 @@ GameObject:
   - component: {fileID: 4588466965463300725}
   - component: {fileID: 4588466965463300727}
   - component: {fileID: 4588466965463300724}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: RearRightWheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -555,7 +548,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7873264688052438521}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Meshes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -592,7 +585,7 @@ GameObject:
   - component: {fileID: 7574216995529020895}
   - component: {fileID: 7574216995527890719}
   - component: {fileID: 7786654485401473292}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -686,7 +679,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7786654484769174639}
   - component: {fileID: 7786654484769174632}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Engine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -813,7 +806,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7786654485009753913}
   - component: {fileID: 7786654485009753918}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: FrontLeftWheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -874,7 +867,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7786654485136965624}
   - component: {fileID: 7786654485136965625}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: FrontRightWheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -934,7 +927,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7786654485236657180}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Colliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -969,7 +962,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7786654485449930084}
   - component: {fileID: 7786654485449930085}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: TireSpin
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1096,7 +1089,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7786654486037553225}
   - component: {fileID: 7786654486037553230}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: RearRightWheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1157,7 +1150,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7786654486115976556}
   - component: {fileID: 7786654486115976557}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: RearLeftWheel
   m_TagString: Untagged
   m_Icon: {fileID: 0}

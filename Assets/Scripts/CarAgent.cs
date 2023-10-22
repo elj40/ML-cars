@@ -8,11 +8,11 @@ public class CarAgent : Agent
 {
     // Define variables for your agent's behavior and state here.
     public GameObject Car;
-    public Transform targetWaypoint;
-    public MeshRenderer groundMesh;
-    public Material roadMaterial;
+    public Transform waypointManager;
     public Material failMaterial;
     public Material winMaterial; 
+
+    private Transform targetWaypoint;
 
     public float totalReward = 0;
 
@@ -29,28 +29,22 @@ public class CarAgent : Agent
     
     public Vector3[] spawnPoints;
 
-    //[HideInInspector]
-    //[HideInInspector]
-
-
-    //[HideInInspector]
+    [HideInInspector]
     public Vector3[] inputs = new Vector3[2];
     [HideInInspector]
-    public float[] outputs = new float[5];
+    public int[] outputs = new int[5];
     [HideInInspector]
     private int previousSpacePressed;
 
     public override void Initialize()
     {
         // Initialize your agent here, called when the Agent is first created.
+        targetWaypoint = waypointManager.GetChild(0);
     }
 
     public override void OnEpisodeBegin()
     {
         // Reset the state of the agent for a new episode here.
-
-        //Debug.Log("New Episode");
-
 
         timeSpent = 0f;
         totalReward = 0f;
@@ -62,7 +56,7 @@ public class CarAgent : Agent
       if (timeSpent > timeLimit) {
         SetReward(-1f);
         spawnAtStart();
-        groundMesh.sharedMaterial = roadMaterial;
+        setWaypointMaterials();
 
         EndEpisode();
       }
@@ -72,6 +66,7 @@ public class CarAgent : Agent
       if (speed < 0.1f) {
         AddReward(-0.2f);
       }
+
     }
 
     public override void CollectObservations(VectorSensor sensor)
@@ -105,6 +100,8 @@ public class CarAgent : Agent
 
     public override void OnActionReceived(ActionBuffers vectorAction)
     {   
+        outputs = new int[5];
+
         // Define the agent's behavior based on the actions received here.
         var discreteActions = vectorAction.DiscreteActions;
         PrometeoCarController controller = Car.GetComponent<PrometeoCarController>();
@@ -114,28 +111,33 @@ public class CarAgent : Agent
           controller.CancelInvoke("DecelerateCar");
           controller.deceleratingCar = false;
           controller.GoForward();
+          outputs[0] = 1;
         }
         //S: Backwards
         if(discreteActions[1] == 1){
           controller.CancelInvoke("DecelerateCar");
           controller.deceleratingCar = false;
           controller.GoReverse();
+          outputs[1] = 1;
         }
         //A: Left
         if(discreteActions[2] == 1){
           controller.TurnLeft();
+          outputs[2] = 1;
 
         }
         //D: Right
         if(discreteActions[3] == 1){
           controller.TurnRight();
 
+          outputs[3] = 1;
         }
         //SPACE: Handbrake
         if(discreteActions[4] == 1){
           controller.CancelInvoke("DecelerateCar");
           controller.deceleratingCar = false;
           controller.Handbrake();
+          outputs[4] = 1;
         }
         //SPACE up
         if(previousSpacePressed == 1 && discreteActions[4] == 0){
@@ -174,19 +176,24 @@ public class CarAgent : Agent
         // Implement a heuristic policy to control the agent during training here.
         if(Input.GetKey(KeyCode.W)){
           discreteActionsOut[0] = 1;
+          outputs[0] = 1;
         }
         if(Input.GetKey(KeyCode.S)){
           discreteActionsOut[1] = 1;
+          outputs[1] = 1;
         }
 
         if(Input.GetKey(KeyCode.A)){
           discreteActionsOut[2] = 1;
+          outputs[2] = 1;
         }
         if(Input.GetKey(KeyCode.D)){
           discreteActionsOut[3] = 1;
+          outputs[3] = 1;
         }
         if(Input.GetKey(KeyCode.Space)){
           discreteActionsOut[4] = 1;
+          outputs[4] = 1;
         }
 
     }
@@ -211,7 +218,7 @@ public class CarAgent : Agent
       else if (other.tag == "Wall") {
         SetReward(-1f);
         //totalReward -= 20f;
-        groundMesh.sharedMaterial = failMaterial;
+        setWaypointMaterials();
         spawnAtStart();
         EndEpisode();
       }
@@ -241,7 +248,13 @@ public class CarAgent : Agent
 
         GetComponent<Rigidbody>().velocity = Vector3.zero;
         GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
-        targetWaypoint = transform.parent.gameObject.transform.Find("WaypointManager").transform.GetChild(0);
+        targetWaypoint = waypointManager.GetChild(0);
+    }
+
+    void setWaypointMaterials() {
+      foreach (Transform child in waypointManager) {
+        child.GetComponent<MeshRenderer>().sharedMaterial = failMaterial;
+      }
     }
 
 }
