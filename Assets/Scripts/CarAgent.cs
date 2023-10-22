@@ -194,7 +194,7 @@ public class CarAgent : Agent
     void OnTriggerEnter(Collider other) {
       if (other.tag == "Waypoint" && other.transform == targetWaypoint) {
         
-        groundMesh.sharedMaterial = winMaterial;
+        other.GetComponent<MeshRenderer>().sharedMaterial = winMaterial;
 
         AddReward(1f);
         Transform nextWp = other.transform.gameObject.GetComponent<WaypointBehaviour>().nextWaypoint;
