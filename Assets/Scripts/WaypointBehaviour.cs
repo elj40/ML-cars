@@ -14,7 +14,7 @@ public class WaypointBehaviour : MonoBehaviour
             Vector3 diff = nextWaypoint.position - transform.position;
             Vector3 diffNorm = diff.normalized;
 
-            toNextWayPoint = diffNorm;
+            toNextWayPoint = diff;
 
             transform.rotation = Quaternion.LookRotation(diffNorm) * Quaternion.Euler(0,90f,0);
         }
