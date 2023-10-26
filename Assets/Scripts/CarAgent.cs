@@ -23,7 +23,7 @@ public class CarAgent : Agent
     public float speedRewardMultiplier = 1;
     [HideInInspector]
     public float reversePenalty = 0.1f;
-    [HideInInspector]
+    //[HideInInspector]
     public float timePenalty = -0.01f;
     public float maxWaypointDistance = 100f;
     
@@ -167,7 +167,7 @@ public class CarAgent : Agent
 
         totalReward += speedReward;
 
-        //AddReward(timePenalty);
+        AddReward(timePenalty);
         //totalReward += timePenalty;
 
     }
