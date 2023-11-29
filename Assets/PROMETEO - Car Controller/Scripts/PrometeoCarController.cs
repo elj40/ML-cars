@@ -329,41 +329,41 @@ public class PrometeoCarController : MonoBehaviour
 
       }else{
 
-        // if(Input.GetKey(KeyCode.W)){
-        //   CancelInvoke("DecelerateCar");
-        //   deceleratingCar = false;
-        //   GoForward();
-        // }
-        // if(Input.GetKey(KeyCode.S)){
-        //   CancelInvoke("DecelerateCar");
-        //   deceleratingCar = false;
-        //   GoReverse();
-        // }
+        if(Input.GetKey(KeyCode.W)){
+          CancelInvoke("DecelerateCar");
+          deceleratingCar = false;
+          GoForward();
+        }
+        if(Input.GetKey(KeyCode.S)){
+          CancelInvoke("DecelerateCar");
+          deceleratingCar = false;
+          GoReverse();
+        }
 
-        // if(Input.GetKey(KeyCode.A)){
-        //   TurnLeft();
-        // }
-        // if(Input.GetKey(KeyCode.D)){
-        //   TurnRight();
-        // }
-        // if(Input.GetKey(KeyCode.Space)){
-        //   CancelInvoke("DecelerateCar");
-        //   deceleratingCar = false;
-        //   Handbrake();
-        // }
-        // if(Input.GetKeyUp(KeyCode.Space)){
-        //   RecoverTraction();
-        // }
-        // if((!Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.W))){
-        //   ThrottleOff();
-        // }
-        // if((!Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.W)) && !Input.GetKey(KeyCode.Space) && !deceleratingCar){
-        //   InvokeRepeating("DecelerateCar", 0f, 0.1f);
-        //   deceleratingCar = true;
-        // }
-        // if(!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && steeringAxis != 0f){
-        //   ResetSteeringAngle();
-        // }
+        if(Input.GetKey(KeyCode.A)){
+          TurnLeft();
+        }
+        if(Input.GetKey(KeyCode.D)){
+          TurnRight();
+        }
+        if(Input.GetKey(KeyCode.Space)){
+          CancelInvoke("DecelerateCar");
+          deceleratingCar = false;
+          Handbrake();
+        }
+        if(Input.GetKeyUp(KeyCode.Space)){
+          RecoverTraction();
+        }
+        if((!Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.W))){
+          ThrottleOff();
+        }
+        if((!Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.W)) && !Input.GetKey(KeyCode.Space) && !deceleratingCar){
+          InvokeRepeating("DecelerateCar", 0f, 0.1f);
+          deceleratingCar = true;
+        }
+        if(!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && steeringAxis != 0f){
+          ResetSteeringAngle();
+        }
 
       }
 
