@@ -10,12 +10,14 @@ Uses a waypoint system but cars still need to find optimum path between waypoint
 
 1. Rebuild car to basic function with ML Agents
 	- Use raycasting method as inputs for the car
-		- Redirect control from inputs through heuristics
-		- Setup inputs (raycast distance * [5,6,7], speed, isDrifting)
-		- Setup outputs: discrete (acc,brake,hbrake,left,right)
+		- ~~Redirect control from inputs through heuristics~~
+		- ~~Setup inputs (raycast distance * [5,6,7], speed, isDrifting)~~
+		- ~~Setup outputs: discrete (acc,brake,hbrake,left,right)~~
+		- Setup Rewards
 	- Train a model using only raycast and simple inputs (benchmark model)
 2. Design more tracks to practice different techniques
 	- Shallow turns
 	- Long straights into different turns
+3. See if a combination of waypoints and perecptrons can work
 
 

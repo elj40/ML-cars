@@ -110,6 +110,7 @@ public class PrometeoCarController : MonoBehaviour
       //[Header("CONTROLS")]
       [Space(10)]
       //The following variables lets you to set up touch controls for mobile devices.
+      public bool useKeyboardControls = true;
       public bool useTouchControls = false;
       public GameObject throttleButton;
       PrometeoTouchInput throttlePTI;
@@ -124,7 +125,6 @@ public class PrometeoCarController : MonoBehaviour
 
     //CAR DATA
 
-      [HideInInspector]
       public float carSpeed; // Used to store the speed of the car.
       [HideInInspector]
       public bool isDrifting; // Used to know whether the car is drifting or not.
@@ -289,6 +289,10 @@ public class PrometeoCarController : MonoBehaviour
       In this part of the code we specify what the car needs to do if the user presses W (throttle), S (reverse),
       A (turn left), D (turn right) or Space bar (handbrake).
       */
+
+      // ADJUSTED BY ELI--
+
+      //
       if (useTouchControls && touchControlsSetup){
 
         if(throttlePTI.buttonPressed){
@@ -327,7 +331,7 @@ public class PrometeoCarController : MonoBehaviour
           ResetSteeringAngle();
         }
 
-      }else{
+      }else if (useKeyboardControls) {
 
         if(Input.GetKey(KeyCode.W)){
           CancelInvoke("DecelerateCar");

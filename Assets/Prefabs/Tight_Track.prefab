@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7798118942895752363}
   m_Layer: 0
   m_Name: Wall.001
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -106,7 +106,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7882889592878133185}
   m_Layer: 0
-  m_Name: Track1_tight
+  m_Name: Tight_Track
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
