@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+//using UnityEngine.UI;
 using Unity.MLAgents;
 using Unity.MLAgents.Sensors;
 using Unity.MLAgents.Actuators;
@@ -9,16 +10,22 @@ public class CarAgent : Agent
     // Define variables for your agent's behavior and state here.
     public float totalReward = 0;
 
+    [Space(10)]
+    [Header("Time Constraints")]
     public float timeSpent = 0f;
+    public float timeToAccelerate = 5.0f;
+    public float timeLimit = 70f;
 
-    public float timeLimit = 50f;
+    [Space(10)]
+    [Header("Reward Mulipliers")]
     //[HideInInspector]
     public float speedRewardMultiplier = 1;
-    [HideInInspector]
+    //[HideInInspector]
     public float reversePenalty = 0.1f;
     //[HideInInspector]
     public float timePenalty = -0.01f;
     
+    [Space(10)]
     public Vector3[] spawnPoints;
 
 
@@ -34,6 +41,7 @@ public class CarAgent : Agent
         // Initialize your agent here, called when the Agent is first created.
         controller = GetComponent<PrometeoCarController>();
         controller.useKeyboardControls = false;
+
     }
 
     public override void OnEpisodeBegin()
@@ -41,8 +49,7 @@ public class CarAgent : Agent
         // Reset the state of the agent for a new episode here.
 
         timeSpent = 0f;
-        totalReward = 0f;
-
+        totalReward = 0f; 
     }
 
     public void Update() {
@@ -55,8 +62,10 @@ public class CarAgent : Agent
       }
 
       float speed = controller.carSpeed/controller.maxSpeed;
-      if (speed < 0.1f) {
-        //AddReward(-0.2f);
+      if (speed < 0.1f && timeSpent > timeToAccelerate) {
+        //AddReward(-100f);
+        spawnAtStart();
+        EndEpisode();
       }
 
     }
@@ -90,6 +99,7 @@ public class CarAgent : Agent
           controller.deceleratingCar = false;
           controller.GoReverse();
           outputs[1] = 1;
+
         }
         //A: Left
         if(discreteActions[2] == 1){
@@ -138,7 +148,6 @@ public class CarAgent : Agent
 
         AddReward(timePenalty);
         totalReward += timePenalty;
-
     }
 
     public override void Heuristic(in ActionBuffers actionsOut)
@@ -197,7 +206,10 @@ public class CarAgent : Agent
 
     void spawnAtStart() {
         Vector3 newPos = spawnPoints[0];
-        float newAngle = 180f;
+
+
+
+        float newAngle = Random.Range(0,1) > 0.5 ? 0f : 180f;
 
         transform.localPosition = newPos;
         transform.rotation = Quaternion.Euler(0, newAngle, 0);

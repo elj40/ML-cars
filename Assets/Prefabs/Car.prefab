@@ -796,10 +796,11 @@ MonoBehaviour:
   MaxStep: 0
   totalReward: 0
   timeSpent: 0
+  timeToAccelerate: 10
   timeLimit: 80
   speedRewardMultiplier: 1
   reversePenalty: 0.1
-  timePenalty: -0.01
+  timePenalty: 0
   spawnPoints: []
   outputs: 0000000000000000000000000000000000000000
 --- !u!1 &7228642001049204135
